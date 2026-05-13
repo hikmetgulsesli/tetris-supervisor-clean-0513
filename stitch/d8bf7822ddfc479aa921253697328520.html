@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tetris Supervisor - Pause</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@600;700&amp;family=Inter:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#343536",
+                        "on-error": "#690005",
+                        "secondary-container": "#464a4b",
+                        "outline-variant": "#44474c",
+                        "inverse-primary": "#515f74",
+                        "on-background": "#e4e2e4",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "inverse-surface": "#e4e2e4",
+                        "tertiary": "#dfc299",
+                        "on-surface-variant": "#c5c6cd",
+                        "surface-bright": "#39393b",
+                        "inverse-on-surface": "#303032",
+                        "error": "#ffb4ab",
+                        "primary": "#b9c7e0",
+                        "on-primary-container": "#9eadc5",
+                        "on-primary-fixed": "#0d1c2f",
+                        "tertiary-fixed": "#fcdeb3",
+                        "primary-fixed": "#d5e3fd",
+                        "on-tertiary-fixed": "#281901",
+                        "tertiary-fixed-dim": "#dfc299",
+                        "primary-container": "#334155",
+                        "on-secondary": "#2d3133",
+                        "surface-tint": "#b9c7e0",
+                        "secondary-fixed": "#e0e3e5",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#b6b9bb",
+                        "surface-container-highest": "#343536",
+                        "primary-fixed-dim": "#b9c7e0",
+                        "surface": "#131315",
+                        "on-tertiary": "#3f2d10",
+                        "on-tertiary-container": "#c3a881",
+                        "error-container": "#93000a",
+                        "on-primary": "#233144",
+                        "on-primary-fixed-variant": "#3a485c",
+                        "on-secondary-fixed": "#191c1e",
+                        "surface-container-high": "#2a2a2b",
+                        "tertiary-container": "#503d1e",
+                        "outline": "#8e9197",
+                        "on-surface": "#e4e2e4",
+                        "on-tertiary-fixed-variant": "#574424",
+                        "secondary": "#c4c7c9",
+                        "surface-container": "#1f1f21",
+                        "on-secondary-fixed-variant": "#444749",
+                        "surface-container-lowest": "#0e0e10",
+                        "surface-container-low": "#1b1b1d",
+                        "surface-dim": "#131315",
+                        "background": "#131315"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "grid-gap": "2px",
+                        "gutter": "16px",
+                        "container-padding": "24px",
+                        "touch-target": "44px"
+                    },
+                    "fontFamily": {
+                        "value-numeric": ["JetBrains Mono"],
+                        "display-lg": ["Space Grotesk"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Space Grotesk"],
+                        "label-caps": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "value-numeric": ["20px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .game-grid {
+            background-image: 
+                linear-gradient(to right, #44474c 1px, transparent 1px),
+                linear-gradient(to bottom, #44474c 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-sm relative overflow-hidden">
+<!-- Top Navigation Placeholder (Blurred) -->
+<header class="bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline-variant w-full px-gutter h-touch-target flex justify-between items-center fixed top-0 z-10 blur-sm opacity-50">
+<div class="font-display-lg text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-widest uppercase">
+            TETRIS SUPERVISOR
+        </div>
+<div class="flex gap-gutter">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">settings</span>
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">leaderboard</span>
+</div>
+</header>
+<!-- Simulated Game Board Background (Blurred) -->
+<main class="flex-grow flex items-center justify-center p-gutter mt-touch-target mb-16 md:mb-0 blur-md opacity-40">
+<div class="w-full max-w-[320px] aspect-[1/2] bg-surface-container-lowest border border-outline-variant relative game-grid">
+<!-- Simulated Active Pieces -->
+<div class="absolute bottom-0 left-[64px] w-[64px] h-[32px] bg-primary border-2 border-surface-container-lowest" style="box-shadow: 0 0 4px #b9c7e0;"></div>
+<div class="absolute bottom-[32px] left-[64px] w-[32px] h-[32px] bg-primary border-2 border-surface-container-lowest" style="box-shadow: 0 0 4px #b9c7e0;"></div>
+<div class="absolute top-[160px] left-[128px] w-[32px] h-[128px] bg-tertiary border-2 border-surface-container-lowest"></div>
+</div>
+</main>
+<!-- Pause Overlay -->
+<div class="absolute inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-gutter">
+<!-- Pause Menu Container -->
+<div class="w-full max-w-sm bg-surface-container border border-outline flex flex-col p-container-padding shadow-2xl relative">
+<!-- Focus Ring Accent -->
+<div class="absolute inset-0 border border-primary pointer-events-none mix-blend-screen opacity-20"></div>
+<!-- Header -->
+<div class="text-center mb-8 border-b border-outline-variant pb-4">
+<h1 class="font-display-lg text-display-lg text-on-surface uppercase tracking-widest text-shadow-glow">GAME PAUSED</h1>
+<p class="font-label-caps text-label-caps text-secondary mt-2">SYSTEM STANDBY</p>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-unit">
+<!-- Primary Action: Resume -->
+<button class="h-touch-target flex items-center justify-center border border-primary bg-primary text-on-primary font-label-caps text-label-caps tracking-widest uppercase transition-colors hover:bg-surface-tint hover:text-on-primary-fixed ring-2 ring-primary ring-offset-2 ring-offset-surface-container">
+<span class="material-symbols-outlined mr-2" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                    RESUME
+                </button>
+<!-- Secondary Action: Restart -->
+<button class="h-touch-target flex items-center justify-center border border-outline-variant bg-transparent text-on-surface font-label-caps text-label-caps tracking-widest uppercase transition-colors hover:bg-surface-variant hover:text-on-surface mt-2">
+<span class="material-symbols-outlined mr-2">refresh</span>
+                    RESTART
+                </button>
+<!-- Destructive/Tertiary Action: Quit -->
+<button class="h-touch-target flex items-center justify-center border border-outline-variant bg-transparent text-error font-label-caps text-label-caps tracking-widest uppercase transition-colors hover:bg-error-container hover:text-on-error-container mt-2">
+<span class="material-symbols-outlined mr-2">logout</span>
+                    QUIT TO MENU
+                </button>
+</div>
+<!-- Match Stats Snapshot (Optional Context) -->
+<div class="mt-8 pt-4 border-t border-outline-variant flex justify-between opacity-70">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-secondary">SCORE</span>
+<span class="font-value-numeric text-value-numeric text-on-surface">045,210</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="font-label-caps text-label-caps text-secondary">TIME</span>
+<span class="font-value-numeric text-value-numeric text-on-surface">12:45</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Placeholder (Blurred) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-16 px-container-padding bg-surface dark:bg-surface border-t border-outline-variant dark:border-outline-variant z-10 blur-sm opacity-50 md:hidden">
+<div class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-container text-primary dark:text-primary-fixed-dim p-unit w-1/3">
+<span class="material-symbols-outlined">terminal</span>
+<span class="font-label-caps text-label-caps mt-1">COMMAND</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim p-unit w-1/3">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-caps text-label-caps mt-1">ANALYTICS</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim p-unit w-1/3">
+<span class="material-symbols-outlined">tune</span>
+<span class="font-label-caps text-label-caps mt-1">SYSTEM</span>
+</div>
+</nav>
+</body></html>

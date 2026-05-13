@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tetris - Game Board</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#343536",
+                        "on-error": "#690005",
+                        "secondary-container": "#464a4b",
+                        "outline-variant": "#44474c",
+                        "inverse-primary": "#515f74",
+                        "on-background": "#e4e2e4",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "inverse-surface": "#e4e2e4",
+                        "tertiary": "#dfc299",
+                        "on-surface-variant": "#c5c6cd",
+                        "surface-bright": "#39393b",
+                        "inverse-on-surface": "#303032",
+                        "error": "#ffb4ab",
+                        "primary": "#b9c7e0",
+                        "on-primary-container": "#9eadc5",
+                        "on-primary-fixed": "#0d1c2f",
+                        "tertiary-fixed": "#fcdeb3",
+                        "primary-fixed": "#d5e3fd",
+                        "on-tertiary-fixed": "#281901",
+                        "tertiary-fixed-dim": "#dfc299",
+                        "primary-container": "#334155",
+                        "on-secondary": "#2d3133",
+                        "surface-tint": "#b9c7e0",
+                        "secondary-fixed": "#e0e3e5",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#b6b9bb",
+                        "surface-container-highest": "#343536",
+                        "primary-fixed-dim": "#b9c7e0",
+                        "surface": "#131315",
+                        "on-tertiary": "#3f2d10",
+                        "on-tertiary-container": "#c3a881",
+                        "error-container": "#93000a",
+                        "on-primary": "#233144",
+                        "on-primary-fixed-variant": "#3a485c",
+                        "on-secondary-fixed": "#191c1e",
+                        "surface-container-high": "#2a2a2b",
+                        "tertiary-container": "#503d1e",
+                        "outline": "#8e9197",
+                        "on-surface": "#e4e2e4",
+                        "on-tertiary-fixed-variant": "#574424",
+                        "secondary": "#c4c7c9",
+                        "surface-container": "#1f1f21",
+                        "on-secondary-fixed-variant": "#444749",
+                        "surface-container-lowest": "#0e0e10",
+                        "surface-container-low": "#1b1b1d",
+                        "surface-dim": "#131315",
+                        "background": "#131315"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "grid-gap": "2px",
+                        "gutter": "16px",
+                        "container-padding": "24px",
+                        "touch-target": "44px"
+                    },
+                    "fontFamily": {
+                        "value-numeric": ["JetBrains Mono"],
+                        "display-lg": ["Space Grotesk"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Space Grotesk"],
+                        "label-caps": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "value-numeric": ["20px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .tetris-grid {
+            display: grid;
+            grid-template-columns: repeat(10, minmax(0, 1fr));
+            grid-template-rows: repeat(20, minmax(0, 1fr));
+            gap: 2px;
+            aspect-ratio: 10 / 20;
+        }
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-rows: repeat(4, minmax(0, 1fr));
+            gap: 2px;
+            aspect-ratio: 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-sm">
+<!-- TopAppBar from JSON -->
+<header class="bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline-variant docked full-width top-0 flex justify-between items-center w-full px-gutter h-touch-target">
+<div class="font-display-lg text-headline-md font-bold text-primary dark:text-primary-fixed-dim uppercase tracking-widest">
+            TETRIS SUPERVISOR
+        </div>
+<div class="flex items-center gap-unit">
+<button class="p-unit text-on-surface-variant hover:bg-surface-bright dark:hover:bg-surface-variant transition-colors duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+<button class="p-unit text-on-surface-variant hover:bg-surface-bright dark:hover:bg-surface-variant transition-colors duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">leaderboard</span>
+</button>
+</div>
+</header>
+<!-- Main Game Area -->
+<main class="flex-grow flex flex-col md:flex-row justify-center items-center gap-container-padding p-container-padding pb-24 md:pb-container-padding">
+<!-- Left HUD: HOLD -->
+<aside class="flex flex-col gap-gutter w-full max-w-[120px] order-2 md:order-1 items-end md:items-start">
+<div class="bg-surface-container-low border border-outline-variant rounded-DEFAULT p-unit w-full">
+<div class="font-label-caps text-label-caps text-secondary-fixed-dim border-b border-outline-variant pb-unit mb-unit text-center">HOLD</div>
+<div class="mini-grid w-full bg-surface-container-lowest p-grid-gap">
+<!-- Placeholder for held piece -->
+<div class="col-start-2 col-span-2 row-start-2 row-span-1 bg-tertiary shadow-[0_0_4px_rgba(223,194,153,0.5)]"></div>
+<div class="col-start-2 col-span-1 row-start-3 row-span-1 bg-tertiary shadow-[0_0_4px_rgba(223,194,153,0.5)]"></div>
+<div class="col-start-3 col-span-1 row-start-3 row-span-1 bg-tertiary shadow-[0_0_4px_rgba(223,194,153,0.5)]"></div>
+</div>
+</div>
+</aside>
+<!-- Center: Game Board -->
+<section class="bg-surface-container-lowest border-2 border-outline-variant p-grid-gap order-1 md:order-2 w-full max-w-[300px] h-full max-h-[600px] shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+<div class="tetris-grid w-full h-full bg-surface-dim">
+<!-- Example active piece (T-Block) -->
+<div class="col-start-5 row-start-1 bg-primary shadow-[0_0_4px_rgba(185,199,224,0.8)]"></div>
+<div class="col-start-4 row-start-2 bg-primary shadow-[0_0_4px_rgba(185,199,224,0.8)]"></div>
+<div class="col-start-5 row-start-2 bg-primary shadow-[0_0_4px_rgba(185,199,224,0.8)]"></div>
+<div class="col-start-6 row-start-2 bg-primary shadow-[0_0_4px_rgba(185,199,224,0.8)]"></div>
+<!-- Example landed blocks -->
+<div class="col-start-1 row-start-20 bg-error shadow-[0_0_4px_rgba(255,180,171,0.5)]"></div>
+<div class="col-start-2 row-start-20 bg-error shadow-[0_0_4px_rgba(255,180,171,0.5)]"></div>
+<div class="col-start-3 row-start-20 bg-error shadow-[0_0_4px_rgba(255,180,171,0.5)]"></div>
+<div class="col-start-4 row-start-20 bg-error shadow-[0_0_4px_rgba(255,180,171,0.5)]"></div>
+</div>
+</section>
+<!-- Right HUD: NEXT, SCORE, LEVEL, LINES -->
+<aside class="flex flex-col gap-gutter w-full max-w-[120px] order-3 items-start md:items-end">
+<!-- NEXT -->
+<div class="bg-surface-container-low border border-outline-variant rounded-DEFAULT p-unit w-full">
+<div class="font-label-caps text-label-caps text-secondary-fixed-dim border-b border-outline-variant pb-unit mb-unit text-center">NEXT</div>
+<div class="mini-grid w-full bg-surface-container-lowest p-grid-gap mb-grid-gap">
+<div class="col-start-2 col-span-1 row-start-2 row-span-3 bg-[#38bdf8] shadow-[0_0_4px_rgba(56,189,248,0.5)]"></div>
+</div>
+<div class="mini-grid w-full bg-surface-container-lowest p-grid-gap opacity-50">
+<div class="col-start-2 col-span-2 row-start-2 row-span-2 bg-[#facc15] shadow-[0_0_4px_rgba(250,204,21,0.5)]"></div>
+</div>
+</div>
+<!-- SCORE -->
+<div class="bg-surface-container-low border border-outline-variant rounded-DEFAULT p-unit w-full text-right">
+<div class="font-label-caps text-label-caps text-secondary-fixed-dim border-b border-outline-variant pb-unit mb-unit">SCORE</div>
+<div class="font-value-numeric text-value-numeric text-on-surface">014520</div>
+</div>
+<!-- LEVEL -->
+<div class="bg-surface-container-low border border-outline-variant rounded-DEFAULT p-unit w-full text-right">
+<div class="font-label-caps text-label-caps text-secondary-fixed-dim border-b border-outline-variant pb-unit mb-unit">LEVEL</div>
+<div class="font-value-numeric text-value-numeric text-on-surface">05</div>
+</div>
+<!-- LINES -->
+<div class="bg-surface-container-low border border-outline-variant rounded-DEFAULT p-unit w-full text-right">
+<div class="font-label-caps text-label-caps text-secondary-fixed-dim border-b border-outline-variant pb-unit mb-unit">LINES</div>
+<div class="font-value-numeric text-value-numeric text-on-surface">042</div>
+</div>
+<button class="mt-auto md:mt-gutter w-12 h-12 flex justify-center items-center rounded-full border border-outline-variant text-on-surface-variant hover:bg-surface-bright hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">pause</span>
+</button>
+</aside>
+</main>
+<!-- BottomNavBar from JSON (Visible on Mobile, Hidden on md+) -->
+<nav class="md:hidden bg-surface dark:bg-surface fixed bottom-0 left-0 w-full flex justify-around items-center h-16 px-container-padding border-t border-outline-variant dark:border-outline-variant z-50">
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-container text-primary dark:text-primary-fixed-dim p-unit w-full h-full scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">terminal</span>
+<span class="font-label-caps text-label-caps">COMMAND</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim p-unit hover:text-on-surface dark:hover:text-on-surface transition-colors w-full h-full" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">insights</span>
+<span class="font-label-caps text-label-caps">ANALYTICS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim p-unit hover:text-on-surface dark:hover:text-on-surface transition-colors w-full h-full" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">tune</span>
+<span class="font-label-caps text-label-caps">SYSTEM</span>
+</a>
+</nav>
+<script>
+        // Expose window.app for testing hooks
+        window.app = {
+            state: 'PLAYING',
+            score: 14520,
+            level: 5,
+            lines: 42
+        };
+    </script>
+</body></html>
